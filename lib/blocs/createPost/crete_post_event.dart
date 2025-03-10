@@ -4,7 +4,7 @@ part of 'crete_post_bloc.dart';
 sealed class CretePostEvent {}
 
 class CreatePost extends CretePostEvent{
-  final File image;
+  final XFile image;
   final String title;
   final String province;
   final String address;

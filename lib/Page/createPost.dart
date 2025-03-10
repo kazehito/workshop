@@ -1,6 +1,8 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:projects/blocs/createPost/crete_post_bloc.dart';
 import 'package:projects/similiar/appcolors.dart';
 
 class Createpost extends StatefulWidget {
@@ -17,7 +19,7 @@ class _CreatepostState extends State<Createpost> {
   TextEditingController priceControl_ = TextEditingController();
   TextEditingController provinceControl_ = TextEditingController();
   String photoMes = "Add a photo";
-
+  XFile? images;
   @override
   void dispose(){
     super.dispose();
@@ -32,6 +34,7 @@ class _CreatepostState extends State<Createpost> {
     if (image != null) {
       setState(() {
         photoMes = "photo added";
+        images = image;
       });
       print('Image selected: ${image.path}');
     }
@@ -45,7 +48,15 @@ class _CreatepostState extends State<Createpost> {
         backgroundColor: AppColors.primary,
         actions: [
           InkWell(
-            onTap: (){},
+            onTap: (){
+              context.read<CretePostBloc>().add(CreatePost(
+                  image: images!,
+                  title: titleControl_.text.trim(),
+                  province: provinceControl_.text.trim(),
+                  address: addressControl_.text.trim(),
+                  price: priceControl_.text.trim()
+              ));
+            },
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Container(
