@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:projects/blocs/user_register_bloc.dart';
+import 'package:projects/blocs/userRegisterBloc/user_register_bloc.dart';
 import 'package:projects/similiar/appcolors.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -19,6 +19,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   void dispose(){
+    super.dispose();
     emailControl_.dispose();
     passwordControl_.dispose();
     phoneControl_.dispose();
@@ -33,7 +34,7 @@ class _RegisterPageState extends State<RegisterPage> {
         BlocListener<UserRegisterBloc, UserRegisterState>(
         listener: (context, state) {
       if(state is RegisterSuccess){
-        Text("success");
+        Navigator.pushNamed(context, '/startpage');
       }else if(state is RegisterFail){
         setState(() {
           errmessage = state.errmessage!;

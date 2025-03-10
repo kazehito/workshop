@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:projects/Page/Register.dart';
+import 'package:projects/blocs/loginBloc/login_bloc.dart';
+import 'package:projects/services/PostService.dart';
 import 'package:projects/services/authservice.dart';
-import 'blocs/user_register_bloc.dart';
+import 'Routes.dart';
+import 'blocs/createPost/crete_post_bloc.dart';
+import 'blocs/userRegisterBloc/user_register_bloc.dart';
 import 'firebase_options.dart';
 
 
@@ -28,9 +32,17 @@ class MyApp extends StatelessWidget {
         BlocProvider<UserRegisterBloc>(
           create: (context) => UserRegisterBloc(AuthService()),
         ),
-
+        BlocProvider<LoginBloc>(
+          create: (context) => LoginBloc(AuthService()),
+        ),
+        BlocProvider<CretePostBloc>(
+          create: (context) => CretePostBloc(PostServcice()),
+        )
       ],
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        initialRoute: '/startpage',
+        onGenerateRoute: RouteGen.generateRoute,
         home: RegisterPage(),
       )
     );

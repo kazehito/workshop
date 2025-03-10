@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -31,5 +32,26 @@ class AuthService {
     } catch (e) {
       return 'An unexpected error occurred. Please try again.';
     }
+  }
+  Future<String> signinUserWithEmailAndPassword({required String email, required String password}) async {
+    try{
+      UserCredential user = await _auth.signInWithEmailAndPassword(email: email, password: password);
+      print(user);
+      return 'success';
+    }
+    on FirebaseAuthException catch(e){
+      print(e.code);
+      if(e.code == 'invalid-credential'){
+        return "wrong password or email";
+      }
+      else {
+      return 'An error occurred during Login. Please try again.';
+      }
+    } catch (e) {
+      return 'An unexpected error occurred. Please try again.';
+    }
+  }
+  Future<void> signOut() async{
+    await _auth.signOut();
   }
 }
