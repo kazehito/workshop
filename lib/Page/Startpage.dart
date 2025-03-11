@@ -1,8 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:projects/Page/postCard.dart';
 import 'package:projects/services/authservice.dart';
 import 'package:projects/similiar/appcolors.dart';
+
+import '../blocs/getPostBloc/get_post_bloc.dart';
 
 class Startpage extends StatefulWidget {
   const Startpage({super.key});
@@ -12,9 +16,12 @@ class Startpage extends StatefulWidget {
 }
 
 class _StartpageState extends State<Startpage> {
+  TextEditingController provinceControl_ = TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
   AuthService authService = AuthService();
   User? _user;
+  String selectedProvince = 'all';
+  String errmessage = '';
 
   @override
   void initState() {
@@ -30,6 +37,7 @@ class _StartpageState extends State<Startpage> {
         print("No user logged in");
       }
     });
+    BlocProvider.of<GetPostBloc>(context).add(GetPost(provience: selectedProvince));
   }
   @override
   Widget build(BuildContext context) {
@@ -40,55 +48,72 @@ class _StartpageState extends State<Startpage> {
       appBar: AppBar(
         leadingWidth: screenWidth/2.8,
         backgroundColor: AppColors.bars,
-        leading: Container(
-          color: Colors.brown,
-          child: DropdownMenu(
-            textStyle: TextStyle(color: Colors.white),
-            initialSelection: Text("all"),
-            label: Text("province", style: TextStyle(color: Colors.white),),
-              dropdownMenuEntries: <DropdownMenuEntry<Color>>[
-            DropdownMenuEntry(value: Colors.white, label: "province1"),
-            DropdownMenuEntry(value: Colors.white, label: "province2"),
-            DropdownMenuEntry(value: Colors.white, label: "province3"),
-            DropdownMenuEntry(value: Colors.white, label: "province4"),
-            DropdownMenuEntry(value: Colors.white, label: "all"),
-          ]),
+        leading: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            color: Colors.brown,
+            child: DropdownButton<String>(
+              value: selectedProvince,
+              onChanged: (newValue) {
+                setState(() {
+                  selectedProvince = newValue!;
+                });
+                // Trigger BLoC event when province changes
+                BlocProvider.of<GetPostBloc>(context)
+                    .add(GetPost(provience: selectedProvince));
+              },
+              items: [
+                DropdownMenuItem(value: 'province1', child: Text("province1")),
+                DropdownMenuItem(value: 'province2', child: Text("province2")),
+                DropdownMenuItem(value: 'province3', child: Text("province3")),
+                DropdownMenuItem(value: 'province4', child: Text("province4")),
+                DropdownMenuItem(value: 'all', child: Text("all")),
+              ],
+            ),
+          ),
         ),
         title: Text("Workshop", style: TextStyle(color: Colors.white),),
         actions: [
           _user == null
-          ?InkWell(
-            onTap: (){
-              Navigator.pushNamed(context, '/login');
-            },
-            child: Container(
-              height: 50,
-              width: 50,
-              decoration: BoxDecoration(
-                color: AppColors.btn1,
-                borderRadius: BorderRadius.circular(50),
+          ?Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: InkWell(
+              onTap: (){
+                Navigator.pushNamed(context, '/login');
+              },
+              child: Container(
+                height: 50,
+                width: 50,
+                decoration: BoxDecoration(
+                  color: AppColors.btn1,
+                  borderRadius: BorderRadius.circular(50),
+                ),
+                child: Center(child: Text('Login', style: TextStyle(color: Colors.white),)),
               ),
-              child: Center(child: Text('Login', style: TextStyle(color: Colors.white),)),
             ),
           )
-          :InkWell(
-            onTap: (){
-              authService.signOut();
-              Navigator.pushNamed(context, '/startpage');
-            },
-            child: Container(
-              height: 50,
-              width: 50,
-              decoration: BoxDecoration(
-                color: AppColors.btn1,
-                borderRadius: BorderRadius.circular(50),
+          :Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: InkWell(
+              onTap: (){
+                authService.signOut();
+                Navigator.pushNamed(context, '/startpage');
+              },
+              child: Container(
+                height: 50,
+                width: 50,
+                decoration: BoxDecoration(
+                  color: AppColors.btn1,
+                  borderRadius: BorderRadius.circular(50),
+                ),
+                child: Center(child: Text('Logout', style: TextStyle(color: Colors.white),)),
               ),
-              child: Center(child: Text('Logout', style: TextStyle(color: Colors.white),)),
             ),
           )
         ],
       ),
-      bottomNavigationBar: BottomAppBar(
+      bottomNavigationBar: _user != null?
+      BottomAppBar(
         height: screenHeight/20,
         color: Colors.orange,
         shape: CircularNotchedRectangle(),
@@ -96,12 +121,52 @@ class _StartpageState extends State<Startpage> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            IconButton(icon: Icon(Icons.person, size: 40,), onPressed: () {
+              Navigator.pushNamed(context, '/profilepage');
+            }),
             IconButton(icon: Icon(Icons.add, size: 40,), onPressed: () {
               Navigator.pushNamed(context, '/createpost');
             }),
+            IconButton(icon: Icon(Icons.history, size: 40,), onPressed: () {
+              Navigator.pushNamed(context, '/profilepage');
+            }),
           ],
         ),
-      ),
+      )
+      : null,
+      body: StreamBuilder<QuerySnapshot>(
+          stream: context.read<GetPostBloc>().state is PostLoaded
+              ? (context.read<GetPostBloc>().state as PostLoaded).posts
+              : null,
+          builder: (context, snapshot) {
+            if (snapshot.hasError) {
+              return Text('Error: ${snapshot.error}');
+            }
+
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            }
+
+            if (snapshot.hasData) {
+              return ListView.builder(
+                itemCount: snapshot.data!.docs.length,
+                itemBuilder: (context, index) {
+                  final DocumentSnapshot document = snapshot.data!.docs[index];
+                  return PostCard(
+                    imageUrl: document['image_url'],
+                    title: document['title'],
+                    province: document['province'],
+                    address: document['address'],
+                    price: document['price'],
+                    createdAt: document['created_at'],
+                  );
+                },
+              );
+            }
+            return const Center(child: Text('No posts available'));
+          }
+        )
+
     );
   }
 }

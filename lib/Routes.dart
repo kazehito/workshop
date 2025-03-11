@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:projects/Page/Startpage.dart';
 import 'package:projects/Page/createPost.dart';
 import 'package:projects/Page/loginPage.dart';
+import 'package:projects/Page/profilePage.dart';
 
 import 'Page/Register.dart';
 
@@ -17,6 +18,8 @@ class RouteGen {
         return MaterialPageRoute(builder: (_) => Startpage());
       case '/createpost':
         return MaterialPageRoute(builder: (_) => Createpost());
+      case '/profilepage':
+        return MaterialPageRoute(builder: (_) => ProfilePage());
       default:
         return _errorRoute();
     }
