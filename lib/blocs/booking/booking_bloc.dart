@@ -20,11 +20,27 @@ class BookingBloc extends Bloc<BookingEvent, BookingState> {
     on<ShowBook>((event, emit) async {
       try {
         final res = _postServcice.getbooking();
-        print('asssssssssssss');
-        print(res);
         emit(BookGet(bookinglist: res));
       } catch (e) {
         emit(BookgetFail(failed: e.toString()));
+      }
+    });
+
+    on<BookingStatus>((event, emit){
+      _postServcice.bookingStatus(event.bookid, event.status);
+    });
+
+    on<GetHistory>((event, emit) async {
+      try {
+        await for (var res in _postServcice.getHistory()) {
+          if (res.isNotEmpty) {
+            emit(HistoryGet(historyList: res));
+            return;
+          }
+        }
+        emit(BookgetFail(failed: 'No history found'));
+      } catch (e) {
+        emit(BookgetFail(failed: 'Something went wrong: $e'));
       }
     });
 

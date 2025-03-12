@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:projects/blocs/booking/booking_bloc.dart';
@@ -13,6 +13,8 @@ class Bookings extends StatefulWidget {
 }
 
 class _BookingsState extends State<Bookings> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
   @override
   void initState() {
     super.initState();
@@ -58,21 +60,37 @@ class _BookingsState extends State<Bookings> {
                       ),
                       height: screenHeight/4,
                       child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Text('${document['bookersID']} : wants to join your event',style: TextStyle(color: Colors.white, fontSize: 30),),
-                          Text(document['status'],style: TextStyle(color: Colors.white,fontSize: 30)),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              IconButton(onPressed: (){}, icon: Icon(Icons.check, color: Colors.yellow,)),
-                              IconButton(onPressed: (){}, icon: Icon(Icons.close, color: Colors.red,))
-                            ],
-                          ),
-
-                        ],
-                      ),
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Text(
+                          '${document['bookersID']} : wants to join your event',
+                          style: TextStyle(color: Colors.white, fontSize: 30),
+                        ),
+                        Text(
+                          document['status'],
+                          style: TextStyle(color: Colors.white, fontSize: 30),
+                        ),
+                        document['status'] == "Pending"
+                            ? Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            IconButton(
+                              onPressed: () {
+                                context.read<BookingBloc>().add(
+                                    BookingStatus(bookid: document.id, status: "Accepted"));
+                              },
+                              icon: Icon(Icons.check, color: Colors.yellow),
+                            ),
+                            IconButton(
+                              onPressed: () {},
+                              icon: Icon(Icons.close, color: Colors.red),
+                            ),
+                          ],
+                        )
+                            : SizedBox(), // Use SizedBox() instead of null
+                      ],
                     ),
+                  ),
                   );
                 },
               );

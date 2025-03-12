@@ -127,7 +127,7 @@ class _StartpageState extends State<Startpage> {
               Navigator.pushNamed(context, '/createpost');
             }),
             IconButton(icon: Icon(Icons.history, size: 40,), onPressed: () {
-              Navigator.pushNamed(context, '/profilepage');
+              Navigator.pushNamed(context, '/history');
             }),
             IconButton(icon: Icon(Icons.book_outlined, size: 40,), onPressed: () {
               Navigator.pushNamed(context, '/booking');

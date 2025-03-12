@@ -18,3 +18,9 @@ class BookgetFail extends BookingState{
   String failed;
   BookgetFail({ required this.failed});
 }
+class bookstatussuccess extends BookingState{}
+
+class HistoryGet extends BookingState{
+  final List<Map<String, dynamic>> historyList;
+  HistoryGet({required this.historyList});
+}

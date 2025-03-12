@@ -117,6 +117,7 @@ class PostServcice{
 
   Stream<QuerySnapshot> getbooking(){
     String? userId = _auth.currentUser?.uid;
+    print(userId);
     try{
       return FirebaseFirestore.instance
           .collection('booking')
@@ -129,6 +130,56 @@ class PostServcice{
     }
   }
 
+  Future <String> bookingStatus(bookid, status)async {
+    try{
+      print('sssssssss');
+      FirebaseFirestore.instance
+          .collection('booking')
+          .doc(bookid)
+          .update({
+        'status' : status
+      });
+      return 'success';
+    }
+    catch (e){
+      return 'fail';
+      print(e);
+    }
+  }
+  Stream<List<Map<String, dynamic>>> getHistory() async* {
+    String? userId = _auth.currentUser?.uid;
+    print(userId);
+    try {
+      await for (var bookingSnapshot in FirebaseFirestore.instance
+          .collection('booking')
+          .where('bookersID', isEqualTo: userId)
+          .snapshots()) {
+
+        List<Map<String, dynamic>> historyData = [];
+        for (var bookingDoc in bookingSnapshot.docs) {
+          String postId = bookingDoc['postID'];
+          String status = bookingDoc['status'];
+
+          var postSnapshot = await FirebaseFirestore.instance
+              .collection('posts')
+              .doc(postId)
+              .get();
+
+          String title = postSnapshot['title'];
+
+          historyData.add({
+            'status': status,
+            'title': title,
+          });
+        }
+
+        yield historyData;
+      }
+    } catch (e) {
+      print('Error fetching history: $e');
+      yield [];
+    }
+  }
 
 
 }
