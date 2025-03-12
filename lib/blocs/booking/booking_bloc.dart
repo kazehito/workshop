@@ -19,7 +19,7 @@ class BookingBloc extends Bloc<BookingEvent, BookingState> {
     });
     on<ShowBook>((event, emit) async {
       try {
-        final res = _postServcice.getbooking();
+        final res = _postServcice.getbooking(event.uid);
         emit(BookGet(bookinglist: res));
       } catch (e) {
         emit(BookgetFail(failed: e.toString()));

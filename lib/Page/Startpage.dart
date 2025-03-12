@@ -45,7 +45,7 @@ class _StartpageState extends State<Startpage> {
     return Scaffold(
       backgroundColor: AppColors.primary,
       appBar: AppBar(
-        leadingWidth: screenWidth/2.8,
+        leadingWidth: screenWidth/2.5,
         backgroundColor: AppColors.bars,
         leading: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -62,10 +62,13 @@ class _StartpageState extends State<Startpage> {
                     .add(GetPost(provience: selectedProvince));
               },
               items: [
-                DropdownMenuItem(value: 'province1', child: Text("province1")),
-                DropdownMenuItem(value: 'province2', child: Text("province2")),
-                DropdownMenuItem(value: 'province3', child: Text("province3")),
-                DropdownMenuItem(value: 'province4', child: Text("province4")),
+                DropdownMenuItem(value: 'Koshi', child: Text("Koshi")),
+                DropdownMenuItem(value: 'Bagmati', child: Text("Bagmati")),
+                DropdownMenuItem(value: 'Gandaki', child: Text("Gandaki")),
+                DropdownMenuItem(value: 'Lumbini', child: Text("Lumbini")),
+                DropdownMenuItem(value: 'Karnali', child: Text("Karnali")),
+                DropdownMenuItem(value: 'Sudurpashchim', child: Text("Sudurpashchim")),
+                DropdownMenuItem(value: 'Madhesh', child: Text("Madhesh")),
                 DropdownMenuItem(value: 'all', child: Text("all")),
               ],
             ),
@@ -113,25 +116,37 @@ class _StartpageState extends State<Startpage> {
       ),
       bottomNavigationBar: _user != null?
       BottomAppBar(
-        height: screenHeight/20,
+        height: screenHeight/15,
         color: Colors.orange,
         shape: CircularNotchedRectangle(),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            IconButton(icon: Icon(Icons.person, size: 40,), onPressed: () {
-              Navigator.pushNamed(context, '/profilepage');
-            }),
-            IconButton(icon: Icon(Icons.add, size: 40,), onPressed: () {
-              Navigator.pushNamed(context, '/createpost');
-            }),
-            IconButton(icon: Icon(Icons.history, size: 40,), onPressed: () {
-              Navigator.pushNamed(context, '/history');
-            }),
-            IconButton(icon: Icon(Icons.book_outlined, size: 40,), onPressed: () {
-              Navigator.pushNamed(context, '/booking');
-            }),
+            InkWell(
+              onTap: () {
+                Navigator.pushNamed(context, '/profilepage');
+              },
+              child: Icon(Icons.person, size: 40,)
+            ),
+            InkWell(
+                onTap: () {
+                  Navigator.pushNamed(context, '/createpost');
+                },
+                child: Icon(Icons.add, size: 40,)
+            ),
+            InkWell(
+                onTap: () {
+                  Navigator.pushNamed(context, '/history');
+                },
+                child: Icon(Icons.history, size: 40,)
+            ),
+            InkWell(
+                onTap: () {
+                  Navigator.pushNamed(context, '/booking');
+                },
+                child: Icon(Icons.book_outlined, size: 40,)
+            ),
           ],
         ),
       )

@@ -10,6 +10,8 @@ class Book extends BookingEvent{
 }
 
 class ShowBook extends BookingEvent{
+  String uid;
+  ShowBook({required this.uid});
 }
 class BookingStatus extends BookingEvent{
   String status;

@@ -115,9 +115,8 @@ class PostServcice{
     }
   }
 
-  Stream<QuerySnapshot> getbooking(){
-    String? userId = _auth.currentUser?.uid;
-    print(userId);
+  Stream<QuerySnapshot> getbooking(userId){
+  print(userId);
     try{
       return FirebaseFirestore.instance
           .collection('booking')

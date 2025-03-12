@@ -89,11 +89,12 @@ class _CreatepostState extends State<Createpost> {
                   initialSelection: Text("all"),
                   label: Text("province", style: TextStyle(color: Colors.white),),
                   dropdownMenuEntries: <DropdownMenuEntry<Color>>[
-                    DropdownMenuEntry(value: Colors.white, label: "province1"),
-                    DropdownMenuEntry(value: Colors.white, label: "province2"),
-                    DropdownMenuEntry(value: Colors.white, label: "province3"),
-                    DropdownMenuEntry(value: Colors.white, label: "province4"),
-                    DropdownMenuEntry(value: Colors.white, label: "all"),
+                    DropdownMenuEntry(value: Colors.white, label: 'Koshi'),
+                    DropdownMenuEntry(value: Colors.white, label: "Bagmati"),
+                    DropdownMenuEntry(value: Colors.white, label: "Lumbini"),
+                    DropdownMenuEntry(value: Colors.white, label: "Karnali"),
+                    DropdownMenuEntry(value: Colors.white, label: "Sudurpashchim"),
+                    DropdownMenuEntry(value: Colors.white, label: "Madhesh"),
                   ]),
             ),
             TextField(
