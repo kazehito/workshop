@@ -56,6 +56,7 @@ class _CreatepostState extends State<Createpost> {
                   address: addressControl_.text.trim(),
                   price: priceControl_.text.trim()
               ));
+              Navigator.pushNamed(context, '/startpage');
             },
             child: Padding(
               padding: const EdgeInsets.all(8.0),
