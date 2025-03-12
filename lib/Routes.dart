@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:projects/Page/Bookings.dart';
 import 'package:projects/Page/Startpage.dart';
 import 'package:projects/Page/createPost.dart';
 import 'package:projects/Page/loginPage.dart';
@@ -20,6 +21,8 @@ class RouteGen {
         return MaterialPageRoute(builder: (_) => Createpost());
       case '/profilepage':
         return MaterialPageRoute(builder: (_) => ProfilePage());
+      case '/booking':
+        return MaterialPageRoute(builder: (_) => Bookings());
       default:
         return _errorRoute();
     }

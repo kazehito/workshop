@@ -60,10 +60,8 @@ class PostServcice{
       var jsonData = json.decode(responseData);
 
       if (response.statusCode == 200) {
-        print(jsonData['secure_url']);
         return jsonData['secure_url'];
       } else {
-        print('Failed to upload image: ${jsonData['error']['message']}');
         return null;
       }
     }
@@ -74,62 +72,62 @@ class PostServcice{
 
   }
   Stream<QuerySnapshot> getPosts(String filter) {
-    print('sssssssssssssss');
-    print('Fetching posts for filter: $filter');
-
     try {
-      print('sssssssssssssss');
       if (filter == 'all') {
-        // For 'all', fetch all posts
         return FirebaseFirestore.instance
             .collection('posts')
             .snapshots()
             .map((snapshot) {
-          // Check if the snapshot has documents
-          if (snapshot.docs.isEmpty) {
-            print('No posts found.');
-          } else {
-            // Print the number of documents in the snapshot
-            print('Number of posts: ${snapshot.docs.length}');
 
-            // Optionally, print each post document
-            for (var post in snapshot.docs) {
-              print('Post data: ${post.data()}');
-            }
-          }
-
-          return snapshot; // Return the snapshot for the stream
+          return snapshot;
         });
       } else {
-        print('sssssdddddddddd');
-        // For a specific province, fetch posts filtered by the province
         return FirebaseFirestore.instance
             .collection('posts')
             .where('province', isEqualTo: filter)
             .snapshots()
             .map((snapshot) {
-          // Check if the snapshot has documents
-          if (snapshot.docs.isEmpty) {
-            print('No posts found for province: $filter');
-          } else {
-            // Print the number of documents in the snapshot
-            print('Number of posts: ${snapshot.docs.length}');
-            // Optionally, print each post document
-            for (var post in snapshot.docs) {
-              print('Post data: ${post.data()}');
-            }
-          }
-          return snapshot; // Return the snapshot for the stream
+
+          return snapshot;
         });
       }
     } catch (e) {
-      // Handle any errors that occur during the Firestore query
-      print('Error fetching posts: $e');
-      return Stream.error(e);  // Return an error stream if an exception occurs
+
+      return Stream.error(e);
+    }
+  }
+  Future<String?> booking(postid,posterid) async {
+    String? userId = _auth.currentUser?.uid;
+    try{
+      final res = FirebaseFirestore.instance
+          .collection('booking')
+          .add({
+        'postID' : postid,
+        'posterID' : posterid,
+        'bookersID' : userId,
+        'status' : 'Pending',
+        'payment' : ''
+      });
+      return 'success';
+    }
+    catch(e){
+      return null;
     }
   }
 
-
+  Stream<QuerySnapshot> getbooking(){
+    String? userId = _auth.currentUser?.uid;
+    try{
+      return FirebaseFirestore.instance
+          .collection('booking')
+          .where('posterID', isEqualTo: userId)
+          .snapshots();
+    }
+    catch(e){
+      print(e);
+      return Stream.error(e);
+    }
+  }
 
 
 

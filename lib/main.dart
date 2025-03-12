@@ -5,6 +5,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:projects/Page/Register.dart';
+import 'package:projects/blocs/booking/booking_bloc.dart';
 import 'package:projects/blocs/loginBloc/login_bloc.dart';
 import 'package:projects/blocs/profileBloc/profile_bloc.dart';
 import 'package:projects/services/PostService.dart';
@@ -50,6 +51,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<ProfileBloc>(
           create: (context) => ProfileBloc(UserService()),
+        ),
+        BlocProvider<BookingBloc>(
+          create: (context) => BookingBloc(PostServcice()),
         )
       ],
       child: MaterialApp(

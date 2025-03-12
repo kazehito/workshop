@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:projects/blocs/booking/booking_bloc.dart';
 import 'package:projects/similiar/appcolors.dart';
 
 class PostCard extends StatelessWidget {
@@ -10,6 +12,8 @@ class PostCard extends StatelessWidget {
   final String address;
   final String price;
   final Timestamp createdAt;
+  final String postersid;
+  final String postid;
 
   const PostCard({
     super.key,
@@ -19,6 +23,8 @@ class PostCard extends StatelessWidget {
     required this.address,
     required this.price,
     required this.createdAt,
+    required this.postersid,
+    required this.postid
   });
 
   @override
@@ -59,6 +65,9 @@ class PostCard extends StatelessWidget {
                   children: [
                     Text('Price: $price', style: TextStyle(color: Colors.white)),
                     InkWell(
+                      onTap: (){
+                        BlocProvider.of<BookingBloc>(context).add(Book(postid: postid, posterid : postersid));
+                      },
                       child: Text('Book', style: TextStyle(color: Colors.white),),
                     )
                   ],

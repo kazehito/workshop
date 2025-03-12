@@ -26,7 +26,6 @@ class _StartpageState extends State<Startpage> {
   @override
   void initState() {
     super.initState();
-    // Listen to auth state changes to get the current user status
     _auth.authStateChanges().listen((User? user) {
       setState(() {
         _user = user;
@@ -130,6 +129,9 @@ class _StartpageState extends State<Startpage> {
             IconButton(icon: Icon(Icons.history, size: 40,), onPressed: () {
               Navigator.pushNamed(context, '/profilepage');
             }),
+            IconButton(icon: Icon(Icons.book_outlined, size: 40,), onPressed: () {
+              Navigator.pushNamed(context, '/booking');
+            }),
           ],
         ),
       )
@@ -159,6 +161,8 @@ class _StartpageState extends State<Startpage> {
                     address: document['address'],
                     price: document['price'],
                     createdAt: document['created_at'],
+                    postersid:  document['posterId'],
+                    postid: document.id,
                   );
                 },
               );
