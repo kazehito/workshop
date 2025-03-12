@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:projects/blocs/userRegisterBloc/user_register_bloc.dart';
@@ -15,7 +14,7 @@ class _RegisterPageState extends State<RegisterPage> {
   TextEditingController passwordControl_ = TextEditingController();
   TextEditingController phoneControl_ = TextEditingController();
 
-  String  errmessage = "";
+  String errmessage = "";
 
   @override
   void dispose(){
@@ -27,7 +26,7 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
-    double screenWidth = MediaQuery.of(context).size.width;
+    //double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: AppColors.primary,
         body:
