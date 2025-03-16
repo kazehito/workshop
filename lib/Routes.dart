@@ -7,6 +7,7 @@ import 'package:projects/Page/createPost.dart';
 import 'package:projects/Page/loginPage.dart';
 import 'package:projects/Page/profilePage.dart';
 
+import 'Page/PayementPage.dart';
 import 'Page/Register.dart';
 
 class RouteGen {
@@ -26,6 +27,15 @@ class RouteGen {
         return MaterialPageRoute(builder: (_) => Bookings());
       case '/history':
         return MaterialPageRoute(builder: (_) => History());
+      case '/payment':
+        return MaterialPageRoute(
+          builder: (context) {
+            final args = settings.arguments as Map<String, dynamic>?;
+            final uid = args?['uid'] ?? '';
+            return Payment(uid: uid);
+          },
+        );
+
       default:
         return _errorRoute();
     }

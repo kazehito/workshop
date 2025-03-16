@@ -19,7 +19,7 @@ class BookingBloc extends Bloc<BookingEvent, BookingState> {
     });
     on<ShowBook>((event, emit) async {
       try {
-        final res = _postServcice.getbooking();
+        final res = _postServcice.getbooking(event.uid);
         emit(BookGet(bookinglist: res));
       } catch (e) {
         emit(BookgetFail(failed: e.toString()));
@@ -32,7 +32,7 @@ class BookingBloc extends Bloc<BookingEvent, BookingState> {
 
     on<GetHistory>((event, emit) async {
       try {
-        await for (var res in _postServcice.getHistory()) {
+        await for (var res in _postServcice.getHistory(event.uid)) {
           if (res.isNotEmpty) {
             emit(HistoryGet(historyList: res));
             return;
@@ -44,5 +44,14 @@ class BookingBloc extends Bloc<BookingEvent, BookingState> {
       }
     });
 
+    on<PayEvent>((event, emit) async {
+      final res = await _postServcice.pay(event.bookingid);
+      if(res == 'success'){
+        emit(PaymentSuccess(state: true));
+      }
+      else{
+        emit(PaymentSuccess(state: false));
+      }
+    });
   }
 }
