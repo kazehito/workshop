@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:http/http.dart' as http;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -27,8 +28,8 @@ class PostServcice{
             'address': address,
             'price': price,
             'created_at': FieldValue.serverTimestamp(),
-          });
 
+          });
           print('Post created');
         } else {
           print('Error uploading image');
@@ -116,7 +117,6 @@ class PostServcice{
   }
 
   Stream<QuerySnapshot> getbooking(userId){
-  print(userId);
     try{
       return FirebaseFirestore.instance
           .collection('booking')
@@ -124,14 +124,12 @@ class PostServcice{
           .snapshots();
     }
     catch(e){
-      print(e);
       return Stream.error(e);
     }
   }
 
   Future <String> bookingStatus(bookid, status)async {
     try{
-      print('sssssssss');
       FirebaseFirestore.instance
           .collection('booking')
           .doc(bookid)
@@ -142,43 +140,59 @@ class PostServcice{
     }
     catch (e){
       return 'fail';
-      print(e);
+
     }
   }
-  Stream<List<Map<String, dynamic>>> getHistory() async* {
-    String? userId = _auth.currentUser?.uid;
-    print(userId);
+
+  Stream<List<Map<String, dynamic>>> getHistory(userId) async* {
     try {
+
       await for (var bookingSnapshot in FirebaseFirestore.instance
           .collection('booking')
           .where('bookersID', isEqualTo: userId)
           .snapshots()) {
-
         List<Map<String, dynamic>> historyData = [];
         for (var bookingDoc in bookingSnapshot.docs) {
+
           String postId = bookingDoc['postID'];
           String status = bookingDoc['status'];
-
+          String posterID = bookingDoc['posterID'];
+          String paymentStatus = bookingDoc['payment'];
           var postSnapshot = await FirebaseFirestore.instance
               .collection('posts')
               .doc(postId)
               .get();
-
-          String title = postSnapshot['title'];
-
+          String title = postSnapshot['title'];;
           historyData.add({
             'status': status,
             'title': title,
+            'posterID' : posterID,
+            'paymentStatus' : paymentStatus,
+            'bookingID' : bookingDoc.id
           });
         }
 
         yield historyData;
       }
     } catch (e) {
-      print('Error fetching history: $e');
       yield [];
     }
   }
+  
+  Future<String?> pay(bookid) async {
+    try{
+      final res = await _firestore
+          .collection('booking')
+          .doc(bookid)
+          .update({
+        "payment" : "Payed"
+      });
+      return 'success';
+    }
+    catch(e){
+      return null;
+    }
 
+  }
 
 }

@@ -30,7 +30,7 @@ class _CreatepostState extends State<Createpost> {
   }
 
   Future<void> pickImageFromGallery() async {
-    final XFile? image = await _picker.pickImage(source: ImageSource.camera);
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
     if (image != null) {
       setState(() {
         photoMes = "photo added";

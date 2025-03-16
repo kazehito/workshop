@@ -26,6 +26,7 @@ class _BookingsState extends State<Bookings> {
     double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
+        title: Text('Booking', style: TextStyle(color: Colors.white),),
         backgroundColor: AppColors.bars,
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.white),
@@ -99,7 +100,7 @@ class _BookingsState extends State<Bookings> {
                       },
                     );
                   }
-                  return const Center(child: Text('No posts available'));
+                  return const Center(child: Text('No post available'));
                 },
               );
             }

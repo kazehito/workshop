@@ -18,9 +18,13 @@ class BookgetFail extends BookingState{
   String failed;
   BookgetFail({ required this.failed});
 }
-class bookstatussuccess extends BookingState{}
+class BookStatusSuccess extends BookingState{}
 
 class HistoryGet extends BookingState{
   final List<Map<String, dynamic>> historyList;
   HistoryGet({required this.historyList});
+}
+class PaymentSuccess extends BookingState{
+  bool state;
+  PaymentSuccess({required this.state});
 }

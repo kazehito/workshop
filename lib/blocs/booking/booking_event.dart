@@ -18,4 +18,11 @@ class BookingStatus extends BookingEvent{
   String bookid;
   BookingStatus({required this.bookid, required this.status});
 }
-class GetHistory extends BookingEvent{}
+class GetHistory extends BookingEvent{
+  String uid;
+  GetHistory({required this.uid});
+}
+class PayEvent extends BookingEvent{
+  String bookingid;
+  PayEvent({required this.bookingid});
+}
